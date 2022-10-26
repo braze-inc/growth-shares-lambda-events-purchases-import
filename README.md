@@ -14,7 +14,7 @@ To successfully use the Lambda function you must have:
 
 ### Events and Purchases
 
-The JSON file **must** be an array of objects. It can contain both events and purchases in the same array. Example:
+The JSON file **must** be an array of objects. It can contain both events and purchases in the same array.
 
     [
       {
@@ -60,7 +60,7 @@ Navigate to the Lambda service in the AWS console. Create a new function by pres
 It is time to configure the importer.
 
 In the Lambda function, navigate to the Configuration tab. From there click on the role.
-<img src="./images/role.png">
+<kbd><img src="./images/role.png"></kbd>
 
 ##### IAM
 
@@ -70,7 +70,7 @@ Attach new policies by clicking on **Add Permissions** and **Attach Policies**. 
 2. `AmazonS3ReadOnlyAccess` - which allows us to read from the bucket
 
 The resulting role should look like this:
-<img src="./images/iam.png">
+<kbd><img src="./images/iam.png"></kbd>
 
 ##### Braze Connection
 
@@ -88,11 +88,13 @@ Navigate to **General configuration** under Configuration and edit the general c
    > More memory allows you to use more threads to send requests which speeds up the process but costs slightly more money. If you would like to use less memory, check out the Customization guide below.
 2. Increase timeout to 15 min and 0 sec.
 
-<img src="./images/configuration.png">
+<kbd><img src="./images/configuration.png" style="border: 1px solid"></kbd>
 
 ##### Connect the bucket
 
 As a final step, we connect the function to start processing the file whenever it is uploaded to the bucket.
 
 In the main function window, click on `+ Add trigger`. Search and select _S3_ in the list. Select which bucket you want to read from. Add the trigger. The resulting setup should look like this:
-<img src="./images/trigger.png">
+<kbd><img src="./images/trigger.png"></kbd>
+
+:tada: You're ready to start sending custom events and purchases to Braze!
