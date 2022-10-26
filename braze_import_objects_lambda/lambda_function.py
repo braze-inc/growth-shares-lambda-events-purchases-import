@@ -69,7 +69,9 @@ def lambda_handler(event, context):
             processor.total_bytes_read,
         )
     else:
-        print(f"INFO: File {object_key} imported successfully")
+        if processor.has_leftover_bytes:
+            print("WARNING: Found unprocessed bytes. That could mean that JSON file was not formatted correctly and could not be parsed fully.")
+        print(f"INFO: Completed importing file {object_key}")
 
     return {
         "objects_sent": processor.processed_objects_count,
@@ -90,6 +92,8 @@ class S3FileProcessor:
         self.total_bytes_read = byte_offset
         self.valid_chunk_bytes_read = 0
         self.processed_objects_count = 0
+
+        self.has_leftover_bytes = False
 
     def process_file(self) -> None:
         all_parsed_objects, current_batch  = [], []
@@ -158,6 +162,8 @@ class S3FileProcessor:
                         yield event_data
                 except json.JSONDecodeError:
                     pass
+        else:
+            self.has_leftover_bytes = bool(current_object)
         
 
     def send_objects_to_braze(self, objects: List[List[Dict]]) -> None:
