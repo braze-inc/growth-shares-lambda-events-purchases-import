@@ -37,11 +37,10 @@ MAX_RETRIES = 5
 
 try:
     BRAZE_API_KEY = os.environ["BRAZE_API_KEY"]
-    BRAZE_API_URL = os.environ["BRAZE_API_URL"]
+    BRAZE_API_URL = os.environ["BRAZE_API_URL"].rstrip('/')
 except KeyError:
     print("ERROR: Braze API key or URL is missing. Cannot process the file")
     raise 
-
 
 REQUEST_HEADERS = {
     "Content-Type": "application/json",
