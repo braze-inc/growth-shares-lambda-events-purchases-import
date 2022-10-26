@@ -55,11 +55,11 @@ If you already have a bucket you're uploading files to, you can skip this step.
 
 #### 2. Deploy the Lambda function
 
-Navigate to the Lambda service in the AWS console. Create a new function by pressing the **Create function** button in the upper right corner. Provide a name for the function such as *brazeObjectImporter*, choose **Python 3.9** runtime and create the function. 
+Navigate to the Lambda service in the AWS console. Create a new function by pressing the **Create function** button in the upper right corner. Provide a name for the function such as _brazeObjectImporter_, choose **Python 3.9** runtime and create the function.
 
-It is time to configure the importer. 
+It is time to configure the importer.
 
-In the Lambda function, navigate to the Configuration tab. From there click on the role. 
+In the Lambda function, navigate to the Configuration tab. From there click on the role.
 <img>
 
 ##### IAM
@@ -78,4 +78,12 @@ Back in the Lambda function configuration, select Environment Variables. Add two
 
 1. `BRAZE_API_KEY` - REST API key which you can configure under the **Developer Settings** in the Braze dashboard  
    :warning: The API key must have a `user.track` permission
-2. `BRAZE_API_URL` - REST API endpoint which corresponds to your dashboard instance, you can find the correct URL in this [table](https://www.braze.com/docs/api/basics/#api-definitions) 
+2. `BRAZE_API_URL` - REST API endpoint which corresponds to your dashboard instance, you can find the correct URL in this [table](https://www.braze.com/docs/api/basics/#api-definitions)
+
+#### Configuration
+
+Finally, navigate to **General configuration** under Configuration and edit the general configuration.
+
+1. Increase memory to 2048MB
+   > More memory allows you to use more threads to send requests which speeds up the process but costs slightly more money. If you would like to use less memory, check out the Customization guide below.
+2. Increase timeout to 15 min and 0 sec.
