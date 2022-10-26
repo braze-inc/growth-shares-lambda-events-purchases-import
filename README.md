@@ -123,10 +123,10 @@ Redshift supports unloading relational data into JSON-like file. This example `u
     unload(
     $$
       select
-        external_id,
-        name,
+        user_id as external_id,
+        event_name as name,
         event_time as time,
-        JSON_PARSE('{"event_property_1":"' ||property_column || '","event_property_array":' ||property_array_column || '}') as properties
+        JSON_PARSE('{"event_property_1":"' ||event_property_column || '","event_property_array":' ||event_property_array_column || '}') as properties
       from my_table;
     $$)
     to 's3://unload-bucket/2022-10-10/'
