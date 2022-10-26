@@ -2,7 +2,7 @@
 
 This AWS Lambda application takes a JSON file containing user custom events and purchases from an S3 bucket and imports it to the Braze platform using the [/user/track](https://www.braze.com/docs/api/endpoints/user_data/post_user_track/) REST endpoint. As soon as the file is uploaded to the specified bucket, the Lambda will kick off and start processing it by streaming the file, parsing objects and sending them to Braze in batches.
 
-There are no limits on the file size or the amount of users. Each function is configured to run for up to 12 minutes and if the file is not done processing, it will invoke a new function to start parsing it from the last object it read. There are automatic retries with exponential backoff in case of network or server errors.
+There are no limits on the file size or the amount of objects. Each function is configured to run for up to 12 minutes and if the file is not done processing, it will invoke a new function to start parsing it from the last object it read. There are automatic retries with exponential backoff in case of network or server errors.
 
 ### Requirements
 
@@ -14,7 +14,9 @@ To successfully use the Lambda function you must have:
 
 ### Events and Purchases
 
-The JSON file **must** be an array of objects. It can contain both events and purchases in the same array.
+The JSON file format must either be an array of objects, or an AWS export JSON file format with one JSON object per line.
+
+Array of objects
 
     [
       {
@@ -37,6 +39,12 @@ The JSON file **must** be an array of objects. It can contain both events and pu
         }
       }
     ]
+
+
+One object per line (eg. Redshift `unload` operation)
+
+    {"external_id":"user1","name":"rented_movie","time":"2013-07-16T19:20:45+01:00","properties":{"movie":"The Sad Egg","director":"Dan Alexander"}}
+    {"external_id":"user1","product_id":"Completed Order","currency":"USD","price":219.98,"time":"2013-07-16T19:20:30+01:00","properties":{"products":[{"name":"Monitor","category":"Gaming","product_amount":19.99}]}}
 
 Learn more about the specific format required by each object:
 
