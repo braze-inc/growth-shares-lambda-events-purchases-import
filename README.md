@@ -60,7 +60,7 @@ Navigate to the Lambda service in the AWS console. Create a new function by pres
 It is time to configure the importer.
 
 In the Lambda function, navigate to the Configuration tab. From there click on the role.
-<img>
+<img src="./images/role.png">
 
 ##### IAM
 
@@ -70,7 +70,7 @@ Attach new policies by clicking on **Add Permissions** and **Attach Policies**. 
 2. `AmazonS3ReadOnlyAccess` - which allows us to read from the bucket
 
 The resulting role should look like this:
-<img>
+<img src="./images/iam.png">
 
 ##### Braze Connection
 
@@ -80,10 +80,19 @@ Back in the Lambda function configuration, select Environment Variables. Add two
    :warning: The API key must have a `user.track` permission
 2. `BRAZE_API_URL` - REST API endpoint which corresponds to your dashboard instance, you can find the correct URL in this [table](https://www.braze.com/docs/api/basics/#api-definitions)
 
-#### Configuration
+##### Configuration
 
-Finally, navigate to **General configuration** under Configuration and edit the general configuration.
+Navigate to **General configuration** under Configuration and edit the general configuration.
 
 1. Increase memory to 2048MB
    > More memory allows you to use more threads to send requests which speeds up the process but costs slightly more money. If you would like to use less memory, check out the Customization guide below.
 2. Increase timeout to 15 min and 0 sec.
+
+<img src="./images/configuration.png">
+
+##### Connect the bucket
+
+As a final step, we connect the function to start processing the file whenever it is uploaded to the bucket.
+
+In the main function window, click on `+ Add trigger`. Search and select _S3_ in the list. Select which bucket you want to read from. Add the trigger. The resulting setup should look like this:
+<img src="./images/trigger.png">
