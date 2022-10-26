@@ -57,7 +57,12 @@ def lambda_handler(event, context):
 
     s3_file = get_s3_file(bucket_name, object_key)
     processor = S3FileProcessor(s3_file, context, byte_offset)
-    processor.process_file()
+
+    try:
+        processor.process_file()
+    except Exception:
+        print(f"ERROR: Encountered a fatal error. Sent {processor.processed_objects_count} objects. Read {processor.total_bytes_read} bytes")
+        raise
 
     print(f"INFO: Processed {format_bytes_read(processor.total_bytes_read)} of the current file")
     print(f"INFO: Imported {processor.processed_objects_count} objects")
