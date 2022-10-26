@@ -1,6 +1,6 @@
 # Braze Custom Events and Purchases Import
 
-This AWS Lambda application takes a JSON file containing user custom events and purchases from an S3 bucket and imports it to the Braze platform using the [/user/track](https://www.braze.com/docs/api/endpoints/user_data/post_user_track/) REST endpoint. As soon as the file is uploaded to the specified bucket, the Lambda will kick off and start processing it by streaming the file, parsing objects and sending them to Braze in batches.
+This AWS Lambda application takes a JSON file containing user custom events and purchases from an S3 bucket and imports it to the Braze platform using the [/user/track](https://www.braze.com/docs/api/endpoints/user_data/post_user_track/) REST endpoint. Once the file is uploaded to the specified bucket, the Lambda will start streaming the file, parsing objects and sending data to Braze in batches.
 
 There are no limits on the file size or the amount of objects. Each function is configured to run for up to 12 minutes and if the file is not done processing, it will invoke a new function to start parsing it from the last object it read. There are automatic retries with exponential backoff in case of network or server errors.
 
@@ -9,7 +9,7 @@ There are no limits on the file size or the amount of objects. Each function is 
 To successfully use the Lambda function you must have:
 
 1. AWS Account
-2. Braze REST API key and URL
+2. Braze [REST API key and URL](https://www.braze.com/docs/api/basics/)
 3. JSON file containing an array of objects
 
 ### Events and Purchases
@@ -53,7 +53,7 @@ Learn more about the specific format required by each object:
 
 ## Deploy the Function
 
-In order to use the function you must have an S3 bucket to upload the files and an IAM role that allows the function to read the file.
+In order to use the function, you must have an S3 bucket to upload the files and an IAM role that allows the function to read the file.
 
 #### 1. Create an S3 Bucket
 
@@ -86,7 +86,7 @@ The resulting role should look like this:
 
 Back in the Lambda function configuration, select Environment Variables. Add two new variables:
 
-1. `BRAZE_API_KEY` - REST API key which you can configure under the **Developer Settings** in the Braze dashboard  
+1. `BRAZE_API_KEY` - REST API key which you can configure under the [**Developer Settings**](https://www.braze.com/docs/api/basics/#rest-api-key) in the Braze dashboard  
    :warning: The API key must have a `user.track` permission
 2. `BRAZE_API_URL` - REST API endpoint which corresponds to your dashboard instance, you can find the correct URL in this [table](https://www.braze.com/docs/api/basics/#api-definitions)
 
@@ -95,7 +95,7 @@ Back in the Lambda function configuration, select Environment Variables. Add two
 Navigate to **General configuration** under Configuration and edit the general configuration.
 
 1. Increase memory to 2048MB
-   > More memory allows you to use more threads to send requests which speeds up the process but costs slightly more money. If you would like to use less memory, check out the Customization guide below.
+   > More memory allows you to use more threads to send requests, which speeds up the process but costs slightly more money. If you would like to use less memory, check out the Customization guide below.
 2. Increase timeout to 15 min and 0 sec.
 
 <kbd><img src="./images/configuration.png" style="border: 1px solid"></kbd>
