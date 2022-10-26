@@ -55,13 +55,13 @@ If you already have a bucket you're uploading files to, you can skip this step.
 
 #### 2. Deploy the Lambda function
 
-Navigate to the Lambda service in the AWS console. Create a new function by pressing the **Create function** button in the upper right corner. Provide a name for the function such as _brazeObjectImporter_, choose **Python 3.9** runtime and create the function.
+Navigate to the Lambda service in the AWS console. Create a new function by pressing the `Create function` button in the upper right corner. Provide a name for the function such as _brazeObjectImporter_, choose **Python 3.9** runtime and create the function.
 
 From [releases](https://github.com/braze-inc/growth-shares-lambda-events-purchases-import/releases), download the latest packaged `.zip` function and import it into Lambda by clicking `Upload from` under the Code tab and selecting the downloaded archive.
 
 It is time to configure the importer.
 
-In the Lambda function, navigate to the Configuration tab. From there click on the role.
+In the Lambda function, navigate to the Configuration tab. Under Permissions, click on the role.
 <kbd><img src="./images/role.png"></kbd>
 
 ##### IAM
