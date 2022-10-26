@@ -30,7 +30,7 @@ from tenacity import (
 )
 
 
-CHUNK_SIZE_1_MB = 1024 * 1024 
+CHUNK_SIZE_1_MB = 10 ** 6
 THREADS = int(os.environ.get("THREADS", 15))
 FUNCTION_TIME_LIMIT = 1000 * 60 * 3  # 3 minutes remaining from 15 minute timeout
 MAX_RETRIES = 5
@@ -282,12 +282,12 @@ def invoke_next_lambda(event: Dict, function_name: str, byte_offset: int) -> Non
 
 
 def format_bytes_read(byte_count: int) -> str:
-    if byte_count >= 10**9:
-        return f"{byte_count / (10**9):,.1f} GB"
-    if byte_count >= 10**6:
-        return f"{byte_count / (10**6):,.1f} MB"
-    if byte_count >= 10**3:
-        return f"{byte_count / (10**3):,.1f} KB"
+    if byte_count >= 10 ** 9:
+        return f"{byte_count / (10 ** 9):,.1f} GB"
+    if byte_count >= 10 ** 6:
+        return f"{byte_count / (10 ** 6):,.1f} MB"
+    if byte_count >= 10 ** 3:
+        return f"{byte_count / (10 ** 3):,.1f} KB"
     return f"{byte_count} B"
 
 
