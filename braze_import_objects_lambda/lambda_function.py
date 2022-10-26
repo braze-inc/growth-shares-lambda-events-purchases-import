@@ -35,8 +35,6 @@ THREADS = int(os.environ.get("THREADS", 15))
 FUNCTION_TIME_LIMIT = 1000 * 60 * 3  # 3 minutes remaining from 15 minute timeout
 MAX_RETRIES = 5
 
-# TODO: what happens if we append a slash?
-
 try:
     BRAZE_API_KEY = os.environ["BRAZE_API_KEY"]
     BRAZE_API_URL = os.environ["BRAZE_API_URL"]
@@ -190,6 +188,10 @@ def get_s3_file(
 
 
 def send_object_chunks_to_braze(object_chunks: List[List[Dict]]) -> int:
+    """Sends a batch of requests to the Braze API. Expects a list of 75 object
+    chunks. Each chunk will be sent to the API in its own thread and it will be
+    retried independently in case of an error.
+    """
     sent = 0
     with ThreadPoolExecutor(max_workers=THREADS) as executor:
         results = executor.map(send_objects_to_braze, object_chunks)
@@ -211,6 +213,19 @@ def on_network_retry_error(state: RetryCallState):
        after=on_network_retry_error,
        reraise=True)
 def send_objects_to_braze(objects: List[Dict]) -> int:
+    """Sends a chunk of 75 objects to Braze. Parses the response and prints
+    whether any of the objects were not possible to be parsed by Braze. Raises
+    an exception in case it encounters an error response.
+    Return the number of objects that were successfully sent to Braze.
+
+    :param objects: List of object dictionaries representing custom events
+                    or purchases
+    :returns: Number of successfully imported objects
+    :raises: APIRetryError - if a retryable error occurred such as an unresponsive
+                             server
+             FatalAPIError - if a non-recoverable error occurred such as lack of
+                             or invalid API key
+    """
     if not objects:
         return 0
 
