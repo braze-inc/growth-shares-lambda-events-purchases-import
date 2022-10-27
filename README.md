@@ -108,3 +108,27 @@ In the main function window, click on `+ Add trigger`. Search and select _S3_ in
 <kbd><img src="./images/trigger.png"></kbd>
 
 :tada: You're ready to start sending custom events and purchases to Braze!
+
+
+### Monitoring and Troubleshooting
+
+During execution, the function will log messages to help you understand if the file is being processed correctly. These logs are available on the CloudWatch service. Under the **Monitor** tab, click on `View logs in CloudWatch`, and select the appropriate function log stream.
+
+In case of an unexpected error or in case of any questions, please [create an issue](https://github.com/braze-inc/growth-shares-lambda-events-purchases-import/issues) and try to include a example of the file that failed.
+
+### Unloading from Redshift
+
+Redshift supports unloading relational data into a JSON-like file. This example `unload` query exports events with properties to an S3 bucket.
+
+    unload(
+    $$
+      select
+        user_id as external_id,
+        event_name as name,
+        event_time as time,
+        JSON_PARSE('{"event_property_1":"' ||event_property_column || '","event_property_array":' ||event_property_array_column || '}') as properties
+      from my_table;
+    $$)
+    to 's3://unload-bucket/2022-10-10/'
+    iam_role 'arn:aws:iam::123456789012:role/service-role/AmazonRedshift-CommandsAccessRole-20221010T101010'
+    FORMAT JSON
