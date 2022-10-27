@@ -112,13 +112,13 @@ In the main function window, click on `+ Add trigger`. Search and select _S3_ in
 
 ### Monitoring and Troubleshooting
 
-The function logs helpful messages while it is executing to help you understand if is processing the file correctly. The logs are available in the CloudWatch service. Under the **Monitor** tab, click on `View logs in CloudWatch`, and select the appropriate function log stream.
+During execution, the function will log messages to help you understand if the file is being processed correctly. These logs are available on the CloudWatch service. Under the **Monitor** tab, click on `View logs in CloudWatch`, and select the appropriate function log stream.
 
 In case of an unexpected error or in case of any questions, please [create an issue](https://github.com/braze-inc/growth-shares-lambda-events-purchases-import/issues) and try to include a example of the file that failed.
 
 ### Unloading from Redshift
 
-Redshift supports unloading relational data into JSON-like file. This example `unload` query exports events with properties to an S3 bucket.
+Redshift supports unloading relational data into a JSON-like file. This example `unload` query exports events with properties to an S3 bucket.
 
     unload(
     $$
